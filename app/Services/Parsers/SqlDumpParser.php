@@ -41,8 +41,9 @@ class SqlDumpParser implements DumpParserInterface
         $data = [];
 
         foreach ($valueRows as $row) {
-            $row = trim($row, '()');
             $rowValues = str_getcsv($row, ',', "'");
+            $rowValues[0] = trim($rowValues[0], '(\'');
+            $rowValues[count($rowValues) - 1] = trim($rowValues[count($rowValues) - 1], ')\'');
             $article = array_combine($columns, $rowValues);
             $article['post_content'] = $this->sanitizeContent($article['post_content']);
             $data[] = [
